@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenLocal()
+    flatDir {
+        dirs 'libs'
+    }
+    //add below for firebaseUI above version 1.0.0
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+
+    defaultConfig {
+        applicationId "com.google.firebase.udacity.friendlychat"
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+
+    //
+   //compile 'com.google.android.gms:play-services:9.0.2'
+
+    // Displaying images
+    compile 'com.github.bumptech.glide:glide:3.6.1'
+
+    //add firebase real-time database
+    compile 'com.google.firebase:firebase-database:9.6.0'
+    //add firbase auth
+    compile 'com.google.firebase:firebase-auth:9.6.0'
+    //add firebase storage
+    compile 'com.google.firebase:firebase-storage:9.6.0'
+    //add firebase notification
+    compile 'com.google.firebase:firebase-messaging:9.6.0'
+    //add firebase config
+    compile 'com.google.firebase:firebase-config:9.6.0'
+    //add firebase uri
+    compile 'com.firebaseui:firebase-ui-auth:0.6.0'
+
+
+
+}
+apply plugin: 'com.google.gms.google-services'
