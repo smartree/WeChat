@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
+                                    .setLogo(R.drawable.logo_1)
                                     .setProviders(AuthUI.EMAIL_PROVIDER,
                                             AuthUI.GOOGLE_PROVIDER)
                                     .build(),
