@@ -8,5 +8,5 @@ This project is to build a group chat android app by using Firebase cloud servic
 **1. Register Account in Firebase Console and Register an App**
     Add Google.JSON
 **2. Firebase Settings**
-**3. Message Class, MessageAdapter, itemview, RecyclerView, etc.
+**3. Message Class, MessageAdapter, itemview, RecyclerView, etc.**
 
