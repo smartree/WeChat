@@ -20,6 +20,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -28,23 +30,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.storage.FirebaseStorage;
@@ -65,8 +57,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int RC_PHOTO_PICKER = 2;
     public static final String WECHAT_MSG_LENGTH_KEY = "wechat_msg_length";
     private static final String TAG = "MainActivity";
-    private ListView mMessageListView;
+    private RecyclerView mMessageRecyclerView;
     private MessageAdapter mMessageAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
     private ProgressBar mProgressBar;
     private ImageButton mPhotoPickerButton;
     private EditText mMessageEditText;
@@ -100,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize references to views
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mMessageListView = (ListView) findViewById(R.id.messageListView);
+        mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
         mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mSendButton = (Button) findViewById(R.id.sendButton);
@@ -121,8 +114,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize message ListView and its adapter
         List<FriendlyMessage> friendlyMessages = new ArrayList<>();
-        mMessageAdapter = new MessageAdapter(this, R.layout.item_message, friendlyMessages);
-        mMessageListView.setAdapter(mMessageAdapter);
+        mMessageAdapter = new MessageAdapter(friendlyMessages);
+        mLayoutManager = new LinearLayoutManager(this);
+        mMessageRecyclerView.setAdapter(mMessageAdapter);
+        mMessageRecyclerView.setLayoutManager(mLayoutManager);
+
 
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
@@ -185,9 +181,10 @@ public class MainActivity extends AppCompatActivity {
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(false)
-                                    .setLogo(R.drawable.logo_1)
+                                    .setLogo(R.drawable.logo)
                                     .setProviders(AuthUI.EMAIL_PROVIDER,
                                             AuthUI.GOOGLE_PROVIDER)
+                                    .setTheme(R.style.PinkTheme)
                                     .build(),
                             RC_SIGN_IN);
                 }
@@ -239,7 +236,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void onSignedOutCleanup() {
         mUsername = ANONYMOUS;
-        mMessageAdapter.clear();
+        mMessageAdapter.getmData().clear();
+        mMessageAdapter.notifyDataSetChanged();
         detachDatabaseReadListener();
     }
     private void attachDatabaseReadListener() {
@@ -249,7 +247,15 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     FriendlyMessage friendlyMessage = dataSnapshot.getValue(FriendlyMessage.class);
-                    mMessageAdapter.add(friendlyMessage);
+                    mMessageAdapter.getmData().add(friendlyMessage);
+                    mMessageAdapter.notifyDataSetChanged();
+//                    mMessageRecyclerView.smoothScrollToPosition(mMessageAdapter.getItemCount() - 1);
+                    mMessageRecyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mMessageRecyclerView.smoothScrollToPosition(mMessageAdapter.getItemCount());
+                        }
+                    });
                 }
 
                 @Override
@@ -311,7 +317,8 @@ public class MainActivity extends AppCompatActivity {
             mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
         }
         detachDatabaseReadListener();
-        mMessageAdapter.clear();
+        mMessageAdapter.getmData().clear();
+        mMessageAdapter.notifyDataSetChanged();
     }
 
     @Override

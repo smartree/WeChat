@@ -1,14 +1,12 @@
-# FriendlyChat
+# [](#header-1) Welcome to GroupChat Android App
+This project is to build a group chat android app by using Firebase cloud service for user authentication, real-time database and storage. It allows users to send and receive text and photos in realtime across platforms.
 
-This repository contains code for the FriendlyChat project in the [Firebase in a Weekend: Android by Google](https://www.udacity.com/course/firebase-in-a-weekend-by-google-android--ud0352) Udacity course.
+# [](#header-1) Final Demo:
+![gif](res/demo.gif)
 
-## Overview
+## [](#header-2) Steps:
+**1. Register Account in Firebase Console and Register an App**
+    Add Google.JSON
+**2. Firebase Settings**
+**3. Message Class, MessageAdapter, itemview, RecyclerView, etc.
 
-FriendlyChat is an app that allows users to send and receive text and photos in realtime across platforms.
-
-## Setup
-
-Setup requires creating a Firebase project. See https://firebase.google.com/ for more information.
-
-## License
-See [LICENSE](LICENSE)
