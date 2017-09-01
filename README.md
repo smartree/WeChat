@@ -2,6 +2,13 @@
 This project is to build a group chat android app by using Firebase cloud service for user authentication, real-time database and storage. It allows users to send and receive text and photos in realtime across platforms.
 
 # [](#header-1) Final Demo:
+
+_It may takes time to load the gif. Please wait._
+
+_Refresh the page to replay the gif._
+
+_Click on picture to watch video._
+
 ![gif](res/demo.gif)
 
 ## [](#header-2) Steps:
